@@ -486,3 +486,6 @@ $RECYCLE.BIN/
 # Database
 *.sqlite
 *.db
+
+# Local Netlify folder
+.netlify

@@ -1,45 +1,75 @@
-import { useEffect, useState } from "react";
-import { ref, set, onValue } from "firebase/database";
-import { db } from "./services/firebase";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
+import { AuthProvider } from "./contexts/AuthContext";
+import PrivateRoute from "./components/PrivateRoute";
+import NavBar from "./components/NavBar";
+import BottomNav from "./components/BottomNav";
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
+import CollectionPage from "./pages/CollectionPage";
+import DeckPage from "./pages/DeckPage";
+
+const theme = createTheme({
+  palette: {
+    mode: "light",
+    primary: { main: "#1565c0" },
+    secondary: { main: "#6a1b9a" },
+  },
+});
+
+function Layout({ children }) {
+  return (
+    <>
+      <NavBar />
+      {children}
+      <BottomNav />
+    </>
+  );
+}
 
 function App() {
-  const [status, setStatus] = useState("Connexion en cours...");
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const testRef = ref(db, "test/connexion");
-
-    // Écriture d'un message dans la DB
-    set(testRef, {
-      message: "Firebase connecté !",
-      timestamp: Date.now(),
-    })
-      .then(() => {
-        // Lecture en temps réel
-        onValue(testRef, (snapshot) => {
-          const data = snapshot.val();
-          if (data) {
-            setStatus(`✅ ${data.message}`);
-          }
-        });
-      })
-      .catch((err) => {
-        setError(`❌ Erreur : ${err.message}`);
-      });
-  }, []);
-
   return (
-    <div style={{ padding: "2rem", fontFamily: "monospace", fontSize: "1.2rem" }}>
-      <h1>Test Firebase</h1>
-      {error ? (
-        <p style={{ color: "red" }}>{error}</p>
-      ) : (
-        <p style={{ color: "green" }}>{status}</p>
-      )}
-      <p style={{ color: "#888", fontSize: "0.9rem" }}>
-        Vérifie aussi dans la console Firebase → Realtime Database → test/connexion
-      </p>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <AuthProvider>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route
+              path="/"
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <HomePage />
+                  </Layout>
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/collection"
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <CollectionPage />
+                  </Layout>
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/deck"
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <DeckPage />
+                  </Layout>
+                </PrivateRoute>
+              }
+            />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </AuthProvider>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
