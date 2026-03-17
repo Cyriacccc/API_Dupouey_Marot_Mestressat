@@ -3,13 +3,14 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  apiKey: "AIzaSyAEdLxHsSWpbn-hB7AYMkWUisVBylGS1TA",
+  authDomain: "rick-morty-card-game.firebaseapp.com",
+  databaseURL:
+    "https://rick-morty-card-game-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "rick-morty-card-game",
+  storageBucket: "rick-morty-card-game.firebasestorage.app",
+  messagingSenderId: "167220951708",
+  appId: "1:167220951708:web:ef2bb980290479dedc4b59",
 };
 
 const app = initializeApp(firebaseConfig);
