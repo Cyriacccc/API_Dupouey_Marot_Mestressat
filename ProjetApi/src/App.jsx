@@ -8,6 +8,7 @@ import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import CollectionPage from "./pages/CollectionPage";
 import DeckPage from "./pages/DeckPage";
+import LobbyPage from "./pages/LobbyPage";
 
 const theme = createTheme({
   palette: {
@@ -61,6 +62,16 @@ function App() {
                 <PrivateRoute>
                   <Layout>
                     <DeckPage />
+                  </Layout>
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/lobby"
+              element={
+                <PrivateRoute>
+                  <Layout>
+                    <LobbyPage />
                   </Layout>
                 </PrivateRoute>
               }

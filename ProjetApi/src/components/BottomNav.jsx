@@ -4,12 +4,14 @@ import Paper from "@mui/material/Paper";
 import HomeIcon from "@mui/icons-material/Home";
 import GridViewIcon from "@mui/icons-material/GridView";
 import StyleIcon from "@mui/icons-material/Style";
+import SportsKabaddiIcon from "@mui/icons-material/SportsKabaddi";
 import { Link, useLocation } from "react-router-dom";
 
 const TABS = [
   { label: "Accueil", icon: <HomeIcon />, path: "/" },
   { label: "Collection", icon: <GridViewIcon />, path: "/collection" },
   { label: "Mon Deck", icon: <StyleIcon />, path: "/deck" },
+  { label: "Combat", icon: <SportsKabaddiIcon />, path: "/lobby" },
 ];
 
 export default function BottomNav() {
