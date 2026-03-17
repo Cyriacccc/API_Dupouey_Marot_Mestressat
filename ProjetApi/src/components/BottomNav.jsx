@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Paper from "@mui/material/Paper";
@@ -15,12 +14,7 @@ const TABS = [
 
 export default function BottomNav() {
   const location = useLocation();
-  const [value, setValue] = useState(0);
-
-  useEffect(() => {
-    const index = TABS.findIndex((t) => t.path === location.pathname);
-    if (index !== -1) setValue(index);
-  }, [location.pathname]);
+  const value = TABS.findIndex((t) => t.path === location.pathname);
 
   return (
     <Paper
@@ -30,7 +24,6 @@ export default function BottomNav() {
       <BottomNavigation
         showLabels
         value={value}
-        onChange={(_, v) => setValue(v)}
       >
         {TABS.map((tab) => (
           <BottomNavigationAction
