@@ -5,6 +5,7 @@ import GridViewIcon from "@mui/icons-material/GridView";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
+/* Composant de page qui affiche le profil de l'utilisateur connecté, avec son avatar, son nom et son email, ainsi que des boutons pour naviguer vers la collection de cartes et la construction du deck, et un bouton pour se déconnecter. Gère la navigation entre les différentes pages de l'application. */
 export default function HomePage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();

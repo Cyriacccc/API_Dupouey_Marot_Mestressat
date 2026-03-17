@@ -7,6 +7,8 @@ import StyleIcon from "@mui/icons-material/Style";
 import SportsKabaddiIcon from "@mui/icons-material/SportsKabaddi";
 import { Link, useLocation } from "react-router-dom";
 
+
+/* Définit les onglets de navigation avec leurs étiquettes, icônes et chemins correspondants */
 const TABS = [
   { label: "Accueil", icon: <HomeIcon />, path: "/" },
   { label: "Collection", icon: <GridViewIcon />, path: "/collection" },
@@ -14,6 +16,7 @@ const TABS = [
   { label: "Combat", icon: <SportsKabaddiIcon />, path: "/lobby" },
 ];
 
+/* Composant de navigation en bas de l'écran qui affiche les onglets définis dans TABS et gère la navigation entre les différentes pages de l'application */
 export default function BottomNav() {
   const location = useLocation();
   const value = TABS.findIndex((t) => t.path === location.pathname);

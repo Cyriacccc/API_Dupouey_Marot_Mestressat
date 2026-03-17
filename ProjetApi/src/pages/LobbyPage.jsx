@@ -16,7 +16,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import { useAuth } from "../contexts/AuthContext";
 import { createGame, joinGame } from "../services/gameService";
 import { getDeck } from "../services/deckService";
-
+/* Composant de page qui permet à l'utilisateur de créer une partie ou de rejoindre une partie existante en entrant un code, avec des messages d'erreur et de chargement. Vérifie que l'utilisateur a construit un deck avant de lui permettre de créer ou rejoindre une partie. Gère la navigation vers la page de combat après avoir rejoint une partie. */
 export default function LobbyPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -25,14 +25,14 @@ export default function LobbyPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [waitingCode, setWaitingCode] = useState(null);
-
+/* Fonction asynchrone pour vérifier que l'utilisateur a construit un deck de 10 cartes en appelant la fonction getDeck du service deckService, et en lançant une erreur si ce n'est pas le cas */
   async function checkDeck() {
     const deck = await getDeck(user.uid);
     if (!deck || deck.length < 10) {
       throw new Error("Tu dois d'abord construire un deck de 10 cartes.");
     }
   }
-
+/* Fonction asynchrone pour créer une partie en appelant la fonction createGame du service gameService, en gérant les états de chargement et d'erreur, et en stockant le code de la partie créée pour l'afficher à l'utilisateur en attendant qu'un adversaire rejoigne. */
   async function handleCreate() {
     setError(null);
     setLoading(true);
@@ -46,7 +46,7 @@ export default function LobbyPage() {
       setLoading(false);
     }
   }
-
+/* Fonction asynchrone pour rejoindre une partie en appelant la fonction joinGame du service gameService, en gérant les états de chargement et d'erreur, et en naviguant vers la page de combat si la jonction est réussie. */
   async function handleJoin() {
     setError(null);
     setLoading(true);

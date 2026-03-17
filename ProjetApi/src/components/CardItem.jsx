@@ -7,12 +7,15 @@ import {
   Chip,
 } from "@mui/material";
 
+/* Définit les couleurs des chips en fonction du statut de la carte (Alive, Dead, unknown) */
 const STATUS_COLORS = {
   Alive: "success",
   Dead: "error",
   unknown: "default",
 };
 
+
+/* Composant qui affiche les informations d'une carte (image, nom, statut, attaque et défense) et gère les interactions de sélection */
 export default function CardItem({ card, onClick, selected = false }) {
   return (
     <Card
@@ -25,6 +28,7 @@ export default function CardItem({ card, onClick, selected = false }) {
         transition: "transform 0.15s, border-color 0.15s",
         "&:hover": onClick ? { transform: "scale(1.04)" } : {},
       }}
+      /* Permet de sélectionner une carte en cliquant dessus, en changeant son apparence (bordure et effet de zoom) pour indiquer qu'elle est sélectionnée */
     >
       <CardMedia
         component="img"

@@ -11,12 +11,14 @@ import SearchIcon from "@mui/icons-material/Search";
 import CardItem from "../components/CardItem";
 import { initCardsIfNeeded, getAllCards } from "../services/cardService";
 
+/* Composant de page qui affiche la collection de cartes de l'utilisateur, avec une barre de recherche pour filtrer les cartes par nom. Gère le chargement des données, les erreurs et l'affichage des cartes. */
 export default function CollectionPage() {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
-
+  
+  /* Utilise useEffect pour charger les cartes depuis le service cardService lors du montage du composant, en gérant les états de chargement et d'erreur */
   useEffect(() => {
     async function load() {
       try {
@@ -32,6 +34,8 @@ export default function CollectionPage() {
     load();
   }, []);
 
+
+/* Filtre les cartes en fonction de la recherche saisie par l'utilisateur, en comparant le nom de chaque carte avec la chaîne de recherche (insensible à la casse) */
   const filtered = cards.filter((c) =>
     c.name.toLowerCase().includes(search.toLowerCase())
   );

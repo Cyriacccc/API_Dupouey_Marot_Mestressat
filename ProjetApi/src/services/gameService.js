@@ -1,10 +1,12 @@
 import { db } from "./firebase";
 import { ref, set, get, update, onValue } from "firebase/database";
 
+/* Service pour gérer les parties de jeu, en utilisant Firebase Realtime Database pour stocker les données. Fournit des fonctions pour créer une nouvelle partie, rejoindre une partie existante, et écouter les changements d'état d'une partie. Chaque partie contient un code unique, un statut (en attente, prête ou terminée), les informations des joueurs A et B, et la date de création. */
 function generateGameCode() {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 }
 
+/* Fonction asynchrone pour créer une nouvelle partie de jeu, en générant un code unique et en stockant les informations du joueur A dans la base de données Firebase. Retourne le code de la partie créée. */
 export async function createGame(userId, userDisplayName) {
   const code = generateGameCode();
   const gameRef = ref(db, `parties/${code}`);
@@ -18,6 +20,7 @@ export async function createGame(userId, userDisplayName) {
   return code;
 }
 
+/* Fonction asynchrone pour rejoindre une partie existante, en vérifiant que la partie existe, qu'elle est en attente, et que le joueur qui rejoint n'est pas déjà dans la partie. Si toutes les conditions sont remplies, met à jour la partie dans la base de données Firebase avec les informations du joueur B et change le statut de la partie à "ready". Retourne les données de la partie mise à jour. */
 export async function joinGame(code, userId, userDisplayName) {
   const gameRef = ref(db, `parties/${code}`);
   const snapshot = await get(gameRef);
@@ -36,6 +39,7 @@ export async function joinGame(code, userId, userDisplayName) {
   return game;
 }
 
+/*  Fonction pour écouter les changements d'état d'une partie en temps réel, en utilisant la fonction onValue de Firebase Realtime Database. Prend en paramètre le code de la partie à écouter et une fonction de rappel qui sera appelée à chaque fois que les données de la partie changent, avec les nouvelles données de la partie en argument. Retourne une fonction de désabonnement pour arrêter l'écoute des changements. */
 export function listenToGame(code, callback) {
   const gameRef = ref(db, `parties/${code}`);
   return onValue(gameRef, (snapshot) => {

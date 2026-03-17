@@ -16,7 +16,7 @@ import { saveDeck, getDeck } from "../services/deckService";
 import { useAuth } from "../contexts/AuthContext";
 
 const DECK_SIZE = 10;
-
+/* Composant de page qui permet à l'utilisateur de construire son deck en sélectionnant des cartes parmi sa collection, avec une barre de recherche pour filtrer les cartes par nom. Gère le chargement des données, la sélection des cartes, la sauvegarde du deck et l'affichage des messages d'erreur ou de succès. */
 export default function DeckPage() {
   const { user } = useAuth();
   const [cards, setCards] = useState([]);
@@ -26,7 +26,7 @@ export default function DeckPage() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [search, setSearch] = useState("");
-
+/* Utilise useEffect pour charger les cartes et le deck de l'utilisateur depuis les services cardService et deckService lors du montage du composant, en gérant les états de chargement et d'erreur */
   useEffect(() => {
     async function load() {
       try {
@@ -44,7 +44,7 @@ export default function DeckPage() {
     }
     load();
   }, [user.uid]);
-
+/* Fonction pour basculer la sélection d'une carte en cliquant dessus, en ajoutant ou supprimant son id de la liste selected, et en réinitialisant le message de succès */
   function toggleCard(id) {
     setSuccess(false);
     setSelected((prev) => {
@@ -53,7 +53,7 @@ export default function DeckPage() {
       return [...prev, id];
     });
   }
-
+/* Fonction asynchrone pour sauvegarder le deck de l'utilisateur en appelant la fonction saveDeck du service deckService, en gérant les états de sauvegarde, d'erreur et de succès */
   async function handleSave() {
     setSaving(true);
     setError(null);
@@ -67,7 +67,7 @@ export default function DeckPage() {
       setSaving(false);
     }
   }
-
+/* Filtre les cartes en fonction de la recherche saisie par l'utilisateur, en comparant le nom de chaque carte avec la chaîne de recherche (insensible à la casse) */
   const filtered = cards.filter((c) =>
     c.name.toLowerCase().includes(search.toLowerCase())
   );
