@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -14,7 +14,7 @@ import {
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import LoginIcon from "@mui/icons-material/Login";
 import { useAuth } from "../contexts/AuthContext";
-import { createGame, joinGame } from "../services/gameService";
+import { createGame, joinGame, listenToGame, initGame } from "../services/gameService";
 import { getDeck } from "../services/deckService";
 /* Composant de page qui permet à l'utilisateur de créer une partie ou de rejoindre une partie existante en entrant un code, avec des messages d'erreur et de chargement. Vérifie que l'utilisateur a construit un deck avant de lui permettre de créer ou rejoindre une partie. Gère la navigation vers la page de combat après avoir rejoint une partie. */
 export default function LobbyPage() {
@@ -60,6 +60,17 @@ export default function LobbyPage() {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    if (!waitingCode) return;
+    const unsub = listenToGame(waitingCode, async (game) => {
+      if (game?.status === "ready") {
+        await initGame(waitingCode);
+        navigate(`/combat/${waitingCode}`);
+      }
+    });
+    return () => unsub();
+  }, [waitingCode, navigate]);
 
   if (waitingCode) {
     return (

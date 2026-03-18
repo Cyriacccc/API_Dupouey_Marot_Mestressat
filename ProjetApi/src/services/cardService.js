@@ -47,3 +47,8 @@ export async function getAllCards() {
   if (!snapshot.exists()) return [];
   return Object.values(snapshot.val());
 }
+
+export async function getCardById(id) {
+  const snapshot = await get(ref(db, `${CARDS_REF}/${id}`));
+  return snapshot.exists() ? snapshot.val() : null;
+}
