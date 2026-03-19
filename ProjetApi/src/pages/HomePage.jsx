@@ -1,14 +1,10 @@
 import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
-import StyleIcon from "@mui/icons-material/Style";
-import GridViewIcon from "@mui/icons-material/GridView";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-/* Composant de page qui affiche le profil de l'utilisateur connecté, avec son avatar, son nom et son email, ainsi que des boutons pour naviguer vers la collection de cartes et la construction du deck, et un bouton pour se déconnecter. Gère la navigation entre les différentes pages de l'application. */
+/* Composant de page qui affiche le profil de l'utilisateur connecté avec son avatar, son nom et son email, ainsi qu'un bouton pour se déconnecter. */
 export default function HomePage() {
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
 
   return (
     <Box p={3} pb={10}>
@@ -24,31 +20,6 @@ export default function HomePage() {
             {user?.email}
           </Typography>
         </Box>
-      </Box>
-
-      <Divider sx={{ mb: 3 }} />
-
-      <Typography variant="subtitle1" fontWeight="bold" mb={2}>
-        Navigation rapide
-      </Typography>
-
-      <Box display="flex" flexDirection="column" gap={1.5} mb={4}>
-        <Button
-          variant="outlined"
-          startIcon={<GridViewIcon />}
-          onClick={() => navigate("/collection")}
-          sx={{ justifyContent: "flex-start", textTransform: "none" }}
-        >
-          Voir la collection de cartes
-        </Button>
-        <Button
-          variant="outlined"
-          startIcon={<StyleIcon />}
-          onClick={() => navigate("/deck")}
-          sx={{ justifyContent: "flex-start", textTransform: "none" }}
-        >
-          Construire mon deck
-        </Button>
       </Box>
 
       <Divider sx={{ mb: 3 }} />

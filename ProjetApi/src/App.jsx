@@ -6,7 +6,7 @@ import NavBar from "./components/NavBar";
 import BottomNav from "./components/BottomNav";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
-import CollectionPage from "./pages/CollectionPage";
+import MyDeckPage from "./pages/MyDeckPage";
 import DeckPage from "./pages/DeckPage";
 import LobbyPage from "./pages/LobbyPage";
 
@@ -47,11 +47,11 @@ function App() {
               }
             />
             <Route
-              path="/collection"
+              path="/mon-deck"
               element={
                 <PrivateRoute>
                   <Layout>
-                    <CollectionPage />
+                    <MyDeckPage />
                   </Layout>
                 </PrivateRoute>
               }

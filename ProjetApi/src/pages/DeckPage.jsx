@@ -75,7 +75,7 @@ export default function DeckPage() {
   return (
     <Box p={3} pb={16} minHeight="100vh">
       <Typography variant="h4" fontWeight="bold" mb={1}>
-        Mon Deck
+        Choisis tes cartes !
       </Typography>
       <Typography variant="body2" color="text.secondary" mb={3}>
         Sélectionne exactement {DECK_SIZE} cartes. Les cartes surlignées en bleu

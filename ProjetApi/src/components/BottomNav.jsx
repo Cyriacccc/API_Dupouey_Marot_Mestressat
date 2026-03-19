@@ -2,17 +2,16 @@ import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Paper from "@mui/material/Paper";
 import HomeIcon from "@mui/icons-material/Home";
-import GridViewIcon from "@mui/icons-material/GridView";
+import CollectionsIcon from "@mui/icons-material/Collections";
 import StyleIcon from "@mui/icons-material/Style";
 import SportsKabaddiIcon from "@mui/icons-material/SportsKabaddi";
 import { Link, useLocation } from "react-router-dom";
 
-
 /* Définit les onglets de navigation avec leurs étiquettes, icônes et chemins correspondants */
 const TABS = [
   { label: "Accueil", icon: <HomeIcon />, path: "/" },
-  { label: "Collection", icon: <GridViewIcon />, path: "/collection" },
-  { label: "Mon Deck", icon: <StyleIcon />, path: "/deck" },
+  { label: "Choix du deck", icon: <StyleIcon />, path: "/deck" },
+  { label: "Mon Deck", icon: <CollectionsIcon />, path: "/mon-deck" },
   { label: "Combat", icon: <SportsKabaddiIcon />, path: "/lobby" },
 ];
 
