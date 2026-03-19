@@ -4,7 +4,7 @@ import { getCharacters } from "./rickMortyService";
 
 /* Service pour gérer les cartes de personnages, en utilisant Firebase Realtime Database pour stocker les données. Fournit des fonctions pour initialiser les cartes à partir de l'API Rick and Morty si elles n'existent pas déjà, et pour récupérer toutes les cartes. Chaque carte contient des informations sur le personnage ainsi que des statistiques aléatoires d'attaque et de défense. */
 const CARDS_REF = "cards";
-const TOTAL_PAGES = 3; // 60 personnages (20 par page)
+const TOTAL_PAGES = 10; // 200 personnages (20 par page)
 
 /* Fonction pour générer des statistiques aléatoires d'attaque et de défense pour chaque carte, avec des valeurs comprises entre 1 et 10. */
 function generateStats() {

@@ -5,10 +5,11 @@ import {
   CircularProgress,
   Alert,
   Chip,
+  Snackbar,
 } from "@mui/material";
 import CardItem from "../components/CardItem";
 import { getAllCards } from "../services/cardService";
-import { getDeck } from "../services/deckService";
+import { getDeck, saveDeck } from "../services/deckService";
 import { useAuth } from "../contexts/AuthContext";
 
 /* Composant de page qui affiche uniquement les cartes composant le deck du joueur connecté. Charge le deck sauvegardé depuis Firebase et affiche les cartes correspondantes avec leurs statistiques. */
@@ -17,6 +18,7 @@ export default function MyDeckPage() {
   const [deckCards, setDeckCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [snackbar, setSnackbar] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -36,9 +38,16 @@ export default function MyDeckPage() {
     load();
   }, [user.uid]);
 
+  async function handleRemove(cardId) {
+    const updated = deckCards.filter((c) => c.id !== cardId);
+    setDeckCards(updated);
+    await saveDeck(user.uid, updated.map((c) => c.id));
+    setSnackbar(true);
+  }
+
   return (
-    <Box p={3} pb={10} minHeight="100vh">
-      <Box display="flex" alignItems="center" gap={2} mb={3}>
+    <Box p={3} pb={16} minHeight="100vh">
+      <Box display="flex" alignItems="center" gap={2} mb={1}>
         <Typography variant="h4" fontWeight="bold">
           Mon deck
         </Typography>
@@ -50,6 +59,9 @@ export default function MyDeckPage() {
           />
         )}
       </Box>
+      <Typography variant="body2" color="text.secondary" mb={3}>
+        Tu peux retirer une carte de ton deck en cliquant sur la corbeille.
+      </Typography>
 
       {loading && (
         <Box display="flex" justifyContent="center" mt={6}>
@@ -69,10 +81,21 @@ export default function MyDeckPage() {
       {!loading && !error && (
         <Box display="flex" flexWrap="wrap" gap={2}>
           {deckCards.map((card) => (
-            <CardItem key={card.id} card={card} />
+            <CardItem
+              key={card.id}
+              card={card}
+              onRemove={() => handleRemove(card.id)}
+            />
           ))}
         </Box>
       )}
+
+      <Snackbar
+        open={snackbar}
+        autoHideDuration={2000}
+        onClose={() => setSnackbar(false)}
+        message="Carte retirée du deck"
+      />
     </Box>
   );
 }

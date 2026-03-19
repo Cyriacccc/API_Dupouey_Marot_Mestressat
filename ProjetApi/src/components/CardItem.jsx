@@ -5,7 +5,9 @@ import {
   Typography,
   Box,
   Chip,
+  IconButton,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 /* Définit les couleurs des chips en fonction du statut de la carte (Alive, Dead, unknown) */
 const STATUS_COLORS = {
@@ -15,8 +17,8 @@ const STATUS_COLORS = {
 };
 
 
-/* Composant qui affiche les informations d'une carte (image, nom, statut, attaque et défense) et gère les interactions de sélection */
-export default function CardItem({ card, onClick, selected = false }) {
+/* Composant qui affiche les informations d'une carte (image, nom, statut, attaque et défense) et gère les interactions de sélection. Affiche un bouton de suppression si la prop onRemove est fournie. */
+export default function CardItem({ card, onClick, selected = false, onRemove }) {
   return (
     <Card
       onClick={onClick}
@@ -26,10 +28,29 @@ export default function CardItem({ card, onClick, selected = false }) {
         border: selected ? "2px solid" : "2px solid transparent",
         borderColor: selected ? "primary.main" : "transparent",
         transition: "transform 0.15s, border-color 0.15s",
+        position: "relative",
         "&:hover": onClick ? { transform: "scale(1.04)" } : {},
       }}
-      /* Permet de sélectionner une carte en cliquant dessus, en changeant son apparence (bordure et effet de zoom) pour indiquer qu'elle est sélectionnée */
     >
+      {onRemove && (
+        <IconButton
+          size="small"
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove();
+          }}
+          sx={{
+            position: "absolute",
+            top: 4,
+            right: 4,
+            bgcolor: "rgba(255,255,255,0.85)",
+            "&:hover": { bgcolor: "error.light", color: "white" },
+            zIndex: 1,
+          }}
+        >
+          <DeleteIcon fontSize="small" />
+        </IconButton>
+      )}
       <CardMedia
         component="img"
         height="180"

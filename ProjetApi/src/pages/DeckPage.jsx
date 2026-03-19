@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import CardItem from "../components/CardItem";
-import { getAllCards } from "../services/cardService";
+import { initCardsIfNeeded, getAllCards } from "../services/cardService";
 import { saveDeck, getDeck } from "../services/deckService";
 import { useAuth } from "../contexts/AuthContext";
 
@@ -30,6 +30,7 @@ export default function DeckPage() {
   useEffect(() => {
     async function load() {
       try {
+        await initCardsIfNeeded();
         const [allCards, savedDeck] = await Promise.all([
           getAllCards(),
           getDeck(user.uid),
