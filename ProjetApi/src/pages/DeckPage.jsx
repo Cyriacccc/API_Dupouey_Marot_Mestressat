@@ -4,7 +4,6 @@ import {
   Typography,
   CircularProgress,
   Alert,
-  Button,
   TextField,
   InputAdornment,
   Chip,
@@ -15,19 +14,18 @@ import CardService from "../services/cardService";
 import { saveDeck, getDeck } from "../services/deckService";
 import { useAuth } from "../contexts/AuthContext";
 
-
 const DECK_SIZE = 10;
-/* Composant de page qui permet à l'utilisateur de construire son deck en sélectionnant des cartes parmi sa collection, avec une barre de recherche pour filtrer les cartes par nom. Gère le chargement des données, la sélection des cartes, la sauvegarde du deck et l'affichage des messages d'erreur ou de succès. */
+
+/* Composant de page qui permet à l'utilisateur de construire son deck en sélectionnant des cartes parmi sa collection, avec une barre de recherche pour filtrer les cartes par nom. La sauvegarde est automatique à chaque sélection ou désélection de carte. */
 export default function DeckPage() {
   const { user } = useAuth();
   const [cards, setCards] = useState([]);
-  const [selected, setSelected] = useState([]); // liste d'ids
+  const [selected, setSelected] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
   const [search, setSearch] = useState("");
-/* Utilise useEffect pour charger les cartes et le deck de l'utilisateur depuis les services cardService et deckService lors du montage du composant, en gérant les états de chargement et d'erreur */
+
+  /* Utilise useEffect pour charger les cartes et le deck de l'utilisateur depuis les services cardService et deckService lors du montage du composant */
   useEffect(() => {
     async function load() {
       try {
@@ -46,45 +44,33 @@ export default function DeckPage() {
     }
     load();
   }, [user.uid]);
-/* Fonction pour basculer la sélection d'une carte en cliquant dessus, en ajoutant ou supprimant son id de la liste selected, et en réinitialisant le message de succès */
-  function toggleCard(id) {
-    setSuccess(false);
-    setSelected((prev) => {
-      if (prev.includes(id)) return prev.filter((x) => x !== id);
-      if (prev.length >= DECK_SIZE) return prev;
-      return [...prev, id];
-    });
+
+  /* Bascule la sélection d'une carte et sauvegarde automatiquement le deck mis à jour dans Firebase */
+  async function toggleCard(id) {
+    const newSelected = selected.includes(id)
+      ? selected.filter((x) => x !== id)
+      : selected.length >= DECK_SIZE
+        ? selected
+        : [...selected, id];
+
+    setSelected(newSelected);
+    await saveDeck(user.uid, newSelected);
   }
-/* Fonction asynchrone pour sauvegarder le deck de l'utilisateur en appelant la fonction saveDeck du service deckService, en gérant les états de sauvegarde, d'erreur et de succès */
-  async function handleSave() {
-    setSaving(true);
-    setError(null);
-    setSuccess(false);
-    try {
-      await saveDeck(user.uid, selected);
-      setSuccess(true);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setSaving(false);
-    }
-  }
-/* Filtre les cartes en fonction de la recherche saisie par l'utilisateur, en comparant le nom de chaque carte avec la chaîne de recherche (insensible à la casse) */
+
+  /* Filtre les cartes en fonction de la recherche saisie par l'utilisateur */
   const filtered = cards.filter((c) =>
     c.name.toLowerCase().includes(search.toLowerCase())
   );
 
-
   return (
-    <Box p={3} pb={16} minHeight="100vh">
+    <Box p={3} pb={14} minHeight="100vh">
       <Typography variant="h4" fontWeight="bold" mb={1}>
         Choisis tes cartes !
       </Typography>
       <Typography variant="body2" color="text.secondary" mb={3}>
-        Sélectionne exactement {DECK_SIZE} cartes. Les cartes surlignées en bleu
-        sont dans ton deck.
+        Sélectionne exactement {DECK_SIZE} cartes. Les cartes surlignées sont
+        dans ton deck. La sélection est sauvegardée automatiquement.
       </Typography>
-
 
       <TextField
         placeholder="Rechercher..."
@@ -100,7 +86,6 @@ export default function DeckPage() {
           ),
         }}
       />
-
 
       {loading ? (
         <Box display="flex" justifyContent="center" mt={6}>
@@ -119,6 +104,11 @@ export default function DeckPage() {
         </Box>
       )}
 
+      {error && (
+        <Alert severity="error" sx={{ mt: 2 }}>
+          {error}
+        </Alert>
+      )}
 
       {/* Barre flottante fixe en bas */}
       <Box
@@ -133,7 +123,6 @@ export default function DeckPage() {
         py={1.5}
         display="flex"
         alignItems="center"
-        gap={2}
         zIndex={1200}
       >
         <Chip
@@ -141,29 +130,7 @@ export default function DeckPage() {
           color={selected.length === DECK_SIZE ? "success" : "default"}
           sx={{ fontWeight: "bold", fontSize: "0.95rem" }}
         />
-        <Box flexGrow={1} />
-        {error && (
-          <Alert severity="error" sx={{ py: 0 }}>
-            {error}
-          </Alert>
-        )}
-        {success && (
-          <Alert severity="success" sx={{ py: 0 }}>
-            Deck sauvegardé !
-          </Alert>
-        )}
-        <Button
-          variant="contained"
-          color="success"
-          disabled={selected.length !== DECK_SIZE || saving}
-          onClick={handleSave}
-          sx={{ textTransform: "none", fontWeight: "bold" }}
-        >
-          {saving ? "Sauvegarde..." : "Sauvegarder le deck"}
-        </Button>
       </Box>
     </Box>
   );
 }
-
-
