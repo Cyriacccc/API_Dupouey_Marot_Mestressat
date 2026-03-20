@@ -11,9 +11,10 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import CardItem from "../components/CardItem";
-import { initCardsIfNeeded, getAllCards } from "../services/cardService";
+import CardService from "../services/cardService";
 import { saveDeck, getDeck } from "../services/deckService";
 import { useAuth } from "../contexts/AuthContext";
+
 
 const DECK_SIZE = 10;
 /* Composant de page qui permet à l'utilisateur de construire son deck en sélectionnant des cartes parmi sa collection, avec une barre de recherche pour filtrer les cartes par nom. Gère le chargement des données, la sélection des cartes, la sauvegarde du deck et l'affichage des messages d'erreur ou de succès. */
@@ -30,9 +31,9 @@ export default function DeckPage() {
   useEffect(() => {
     async function load() {
       try {
-        await initCardsIfNeeded();
+        await CardService.initCardsIfNeeded();
         const [allCards, savedDeck] = await Promise.all([
-          getAllCards(),
+          CardService.getAllCards(),
           getDeck(user.uid),
         ]);
         setCards(allCards);
@@ -73,6 +74,7 @@ export default function DeckPage() {
     c.name.toLowerCase().includes(search.toLowerCase())
   );
 
+
   return (
     <Box p={3} pb={16} minHeight="100vh">
       <Typography variant="h4" fontWeight="bold" mb={1}>
@@ -82,6 +84,7 @@ export default function DeckPage() {
         Sélectionne exactement {DECK_SIZE} cartes. Les cartes surlignées en bleu
         sont dans ton deck.
       </Typography>
+
 
       <TextField
         placeholder="Rechercher..."
@@ -97,6 +100,7 @@ export default function DeckPage() {
           ),
         }}
       />
+
 
       {loading ? (
         <Box display="flex" justifyContent="center" mt={6}>
@@ -114,6 +118,7 @@ export default function DeckPage() {
           ))}
         </Box>
       )}
+
 
       {/* Barre flottante fixe en bas */}
       <Box
@@ -160,3 +165,5 @@ export default function DeckPage() {
     </Box>
   );
 }
+
+
